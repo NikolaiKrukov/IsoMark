@@ -1,3 +1,5 @@
 初版代码库，包括注释、README在内的各种情况尚未调整。
 
+本科毕业论文。代码框架基于https://github.com/lilakk/PostMark（[arxiv.org/abs/2406.14517](https://arxiv.org/abs/2406.14517 "https://arxiv.org/abs/2406.14517")）。
+
 由于我们的代码在多线程运行上的缺陷，outputs中的实验数据会出现行间顺序不一致的问题，但这一缺陷对最终实验结果没有影响。
