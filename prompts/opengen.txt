@@ -1,0 +1,3 @@
+Generate a continuation for the following text in 200-250 words, only include the continuation in your response.
+{}
+Output the pure English text. Don't output anything else.

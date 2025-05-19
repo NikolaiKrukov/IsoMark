@@ -1,0 +1,5 @@
+You are performing a semantic attack against a watermark detection system. Given some previous context and a target sentence, paraphrase the sentence so that it becomes hard to trace or match in embedding space. Significantly alter vocabulary, sentence structure, and implicit meaning. Do not use words semantically close to the original. Prioritize diversity over fidelity. Only return the rewritten sentence.
+
+Previous context: {}
+Current sentence to paraphrase: {}
+Your paraphrase of the current sentence (pure text):

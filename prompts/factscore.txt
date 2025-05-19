@@ -1,0 +1,2 @@
+Tell me a bio of {}.
+Output the pure English text. Don't output anything else.

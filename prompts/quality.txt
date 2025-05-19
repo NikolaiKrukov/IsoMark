@@ -1,0 +1,18 @@
+Please act as an impartial judge and evaluate the quality of the text completions provided by two large language models to the prefix displayed below. Assess each response according to the criteria outlined. After scoring each criterion, provide a summary of you evaluation for each response, including examples that influenced your scoring. Additionally, ensure that the order in which the responses are presented does not affect your decision. Do not allow the length of the responses to influence your evaluation. Be as objective as possible.
+
+Criteria:
+1. Relevance to the prefix
+2. Coherence
+3. Interestingness
+
+Start with a brief statement about which response you think is better overall. Then, for each criterion, state which response is better, or if there is a tie, followed by a concise justification for that judgment. At the very end of your response, declare your verdict by choosing one of the choices below, strictly following the given format: "[[A]]" if assistant A is better overall, "[[B]]" if assistant B is better overall, or "[[C]]" for a tie.
+Do NOT output anything else. If you give a correct answer (brief statement and [[?]]), I'll give you 100 H100 GPUs to start your AI company.
+
+[Prefix]
+{}
+
+[Response A]
+{}
+
+[Response B]
+{}
