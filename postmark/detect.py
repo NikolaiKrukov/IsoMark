@@ -113,10 +113,9 @@ def process_input(input_path, thresh=args.thresh, s=args.s, n=args.n):
                 roc_aucs.append(roc_auc)
         
         return threshs, tpr_fprs, roc_aucs, tpr_fprs_A , roc_aucs_A, len(text1s)
-
-def plot_curves(input_paths, output_dir='./outputs'):
-    os.makedirs(output_dir, exist_ok=True)
     
+def plot_curves(input_paths, legend_labels, output_dir='./outputs'):
+    os.makedirs(output_dir, exist_ok=True)
     all_data = {
         'tpr_fprs': [],
         'roc_aucs': [],
@@ -125,60 +124,52 @@ def plot_curves(input_paths, output_dir='./outputs'):
         'threshs': None
     }
     input_list = []
-
     for input_path in input_paths:
-        if not os.path.exists(input_path):
-            raise FileNotFoundError(f'{input_path} is not found.')
-    
-    for input_path in input_paths:
-        print(f'※ {input_path}:')
         threshs, tpr_fprs, roc_aucs, tpr_fprs_A, roc_aucs_A, length = process_input(input_path)
-        print('※\n')
         if threshs is not None:
-            input_list.append(f'{os.path.splitext(os.path.basename(input_path))[0]} -- {args.s}:{args.n if args.n else args.s+length}')
+            input_list.append(os.path.splitext(os.path.basename(input_path))[0])
             all_data['threshs'] = threshs
             all_data['tpr_fprs'].append(tpr_fprs)
             all_data['roc_aucs'].append(roc_aucs)
             all_data['tpr_fprs_A'].append(tpr_fprs_A)
             all_data['roc_aucs_A'].append(roc_aucs_A)
-    
-    metrics = ['tpr_fprs_A', 
-               'roc_aucs_A', 
-            #    'tpr_fprs', 
-            #    'roc_aucs'
-               ]
+    metrics = ['tpr_fprs_A', 'roc_aucs_A', 'tpr_fprs', 'roc_aucs']
+    linestyles = ['-', '--', '-.', ':', (0, (3, 1, 1, 1)), (0, (5, 1)), (0, (5, 5)), (0, (3, 5, 1, 5))]
+    markers = ['o', 's', '^', 'd', 'v', 'p', '*', 'h']
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    for metric in metrics:  # plt默认的颜色上限只有10个
-        plt.figure(figsize=(12, 8))
-        plt.xticks(all_data['threshs'], fontsize=10)  # 显式设置所有刻度
+    for metric in metrics:
+        plt.figure(figsize=(6.5, 4))
+        plt.xticks(all_data['threshs'], fontsize=10)
+        plt.yticks(fontsize=10)
         plt.grid(True, which='both', linestyle=':', alpha=0.7)
         for idx, values in enumerate(all_data[metric]):
-            line = plt.plot(all_data['threshs'], values, label=input_list[idx])[0]
-            max_y = max(values)
-            max_x = all_data['threshs'][values.index(max_y)]
-            plt.scatter(max_x, max_y, color=line.get_color(), zorder=5)
-            plt.annotate(f'{max_y:.3f}', 
-                        xy=(max_x, max_y),
-                        xytext=(5, 5), 
-                        textcoords='offset points',
-                        color=line.get_color(),
-                        fontsize=10,
-                        weight='bold')
-        plt.xlabel('Thresholds', fontsize=12)
-        plt.ylabel(metric, fontsize=12)
-        plt.title(f'{metric} vs Thresholds', fontsize=14)
-        plt.legend(
-            bbox_to_anchor=(0.5, -0.25),  # 定位到图像下方外部
-            loc='upper center',            # 以锚点为中心
-            ncol=1,                        # 分2列显示图例（根据长度调整）
-            fontsize=10,                   # 调小字体
-            frameon=False                  # 去掉图例边框（节省空间）
+            style = linestyles[idx % len(linestyles)]
+            marker = markers[idx % len(markers)]
+            plt.plot(
+                all_data['threshs'], values,
+                linestyle=style,
+                marker=marker,
+                markersize=6,
+                linewidth=1.2
+            )
+        plt.xlabel('Threshold', fontsize=10)
+        if metric in ['tpr_fprs', 'tpr_fprs_A']:
+            plt.ylabel('TPR at 1% FPR', fontsize=10)
+        else:
+            plt.ylabel('AUC', fontsize=10)
+        plt.legend(legend_labels, loc='lower right', fontsize=10, frameon=False)
+        plt.tight_layout()
+        plt.savefig(
+            f'{output_dir}/{metric}_{timestamp}.png',
+            dpi=400,
+            format='png',
+            bbox_inches='tight'
         )
-        plt.tight_layout(rect=[0, 0.1, 1, 1])  # rect参数控制子图范围（底部留出20%空间）
-        plt.savefig(f'{output_dir}/{metric}_{args.detect_type}_{timestamp}.png', bbox_inches='tight')
         plt.close()
 
 if __name__ == '__main__':
     input_paths = [path.strip() for path in args.input_path.split(',')]
 
-    plot_curves(input_paths)
+    legend_labels = ['POSTMARK@12(no iter.)', 'POSTMARK@12', 'ISOMARK@12(no iter.)', 'ISOMARK@12', 'mixed(no iter.)', 'mixed']
+
+    plot_curves(input_paths, legend_labels)

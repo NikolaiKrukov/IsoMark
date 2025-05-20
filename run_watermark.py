@@ -5,6 +5,7 @@ def run_watermark():
     config = {
         'script': 'postmark/watermark.py',
         'dataset': 'opengen',
+        'output_path': 'outputs/test.jsonl',
         'function': 'normal',  # 注意不要打错了
         'embed_type': 'isolated',  # 注意不要打错了
         'ratio': 0.12,
@@ -13,12 +14,12 @@ def run_watermark():
         'up': 1.0,
         'down': 0.6,
         'freq_thresh': 1000,  # 目前效果只能拿来当baseline
-        'iterate': 20,
+        'iterate': 0,  ###
         'iterate_type': 'v1',
-        'attack': 'paraphrase',
-        'm': 4,
+        'attack': 'none',
+        'm': 1,
         's': 0,
-        'n': 10,
+        'n': 5,
         'cache_text1': 'outputs/opengen/gpt-4_postmark-12-open.jsonl',
         # 'cache_text2': 'outputs/test_nomic_r0.12_f1000_isolated_u0.8_d0.6_i20-v1_paragraph-deepseek-v3.jsonl'
     }
@@ -28,6 +29,7 @@ def run_watermark():
         sys.executable,
         config['script'],
         '--dataset', config['dataset'],
+        '--output_path', config['output_path'],  ###
         '--function', config['function'],
         '--embed_type', config['embed_type'],
         '--ratio', str(config['ratio']),

@@ -11,7 +11,6 @@ from tqdm import tqdm
 import torch
 import json
 import random
-import nltk
 from models import LLM
 from embed import Embed
 from utils import plot_distribution, dataset_get, load_template
@@ -36,9 +35,9 @@ parser.add_argument('--alpha', type=float, help='Determines the proportion of or
 parser.add_argument('--freq_thresh', type=float, help='Determines the proportion of origin watermark words in filtered method.', default=1.0)
 
 parser.add_argument('--iterate', type=int, help='The step of the iterative insertion. 0 means no iteration.', default=0)
-parser.add_argument('--iterate_type', type=str, help='v1: Use normal iterate method. v2: Attempt to obtain greater sub_presence using origin iteration method.', choices=['v1', 'v2', 'v0'], default='v1')
+parser.add_argument('--iterate_type', type=str, help='v1: Use normal iterate method. v2: Attempt to obtain greater sub_presence using origin iteration method.', choices=['v1', 'v2'], default='v1')
 
-parser.add_argument('--attack', type=str, help='Which attack method.', choices=['none', 'random_remove', 'paraphrase', 'paragraph'], default='none')
+parser.add_argument('--attack', type=str, help='Which attack method.', choices=['none', 'random_remove', 'paraphrase', 'paraphrase_total', 'senamtic_replace'], default='none')
 parser.add_argument('--attacker', type=str, help='Which attack model.', choices=['gpt-3.5-turbo', 'gpt-4o', 'qwen-max', 'qwen-turbo', 'deepseek-v3'], default='deepseek-v3')
 
 parser.add_argument('--m', type=int, help='Number of thread to use.', default=1)
@@ -151,10 +150,6 @@ class Watermarker():
                 for sublist in sublists:
                     new_prompt = self.template.format(input_res, ', '.join(sublist))
                     input_res = self.inserter.generate(new_prompt, max_tokens=max_tokens, temperature=0)
-            elif self.iterate_type == 'v0':
-                for sublist in sublists:
-                    new_prompt = self.template.format(input_res, ', '.join(sublist))
-                    input_res = self.inserter.generate(new_prompt, max_tokens=max_tokens, temperature=0)
             else:
                 raise NotImplementedError('Error iterate_type.')
 
@@ -185,7 +180,7 @@ class Watermarker():
         }
         return res, presence11, presence12, presence22
 
-def process_text(thread_id, chunks, template, paragraph_mode=True, sentences_per_paragraph=4):
+def process_text(thread_id, chunks, template):
     try:
         with file_lock1:
             watermarker = Watermarker()
@@ -201,42 +196,7 @@ def process_text(thread_id, chunks, template, paragraph_mode=True, sentences_per
                     prompt = template.format(dd['prefix'])  # 作者的prefix并没有包含template
                     text1 = watermarker.model.generate(prompt, max_tokens=1500, temperature=1)
 
-                if not paragraph_mode:
-                    # ---------- 全文级插入 ----------
-                    record, presence11, presence12, presence22 = (watermarker.insert_watermark(text1, max_tokens=1500))
-                else:
-                    # ---------- 段落级插入 ----------
-                    sentences = nltk.tokenize.sent_tokenize(text1)
-                    paragraphs = []
-                    for i in range(0, len(sentences), sentences_per_paragraph):
-                        chunk_sents = sentences[i:i + sentences_per_paragraph]
-                        paragraphs.append(" ".join(chunk_sents))
-                    merged_text2_parts = []
-                    merged_list2 = []
-                    total_presence11 = 0
-                    total_presence12 = 0
-                    total_presence22 = 0
-
-                    for para in paragraphs:
-                        part_record, p11, p12, p22 = (
-                            watermarker.insert_watermark(para, max_tokens=1500)
-                        )
-                        merged_text2_parts.append(part_record.get('text2', ''))
-                        merged_list2.extend(part_record.get('list2', []))
-                        total_presence11 += p11
-                        total_presence12 += p12
-                        total_presence22 += p22
-
-                    combined_text2 = "\n".join(merged_text2_parts)
-                    record = {
-                        'text1': text1,
-                        'text2': combined_text2,
-                        'list2': merged_list2,
-                    }
-                    presence11 = total_presence11
-                    presence12 = total_presence12
-                    presence22 = total_presence22
-                
+                record, presence11, presence12, presence22 = watermarker.insert_watermark(text1, max_tokens=1500)
                 dd.update(record)  # update是原地操作
                 record = dd
 
