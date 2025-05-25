@@ -170,6 +170,6 @@ def plot_curves(input_paths, legend_labels, output_dir='./outputs'):
 if __name__ == '__main__':
     input_paths = [path.strip() for path in args.input_path.split(',')]
 
-    legend_labels = ['POSTMARK@12(no iter.)', 'POSTMARK@12', 'ISOMARK@12(no iter.)', 'ISOMARK@12', 'mixed(no iter.)', 'mixed']
+    legend_labels = ['POSTMARK@12(no iter.)', 'POSTMARK@12', 'ISOMARK@12(no iter.)', 'ISOMARK@12', 'mixed@12']  ###
 
     plot_curves(input_paths, legend_labels)

@@ -54,6 +54,11 @@ class LLM_API():  # 非推理
                 time.sleep(delay)
                 delay *= 2
         if response:
+            # 提取并打印 token 使用情况
+            usage = response.usage
+            print(f"Total tokens: {usage.total_tokens}")
+            print(f"Prompt tokens (input): {usage.prompt_tokens}")
+            print(f"Completion tokens (output): {usage.completion_tokens}")
             return response.choices[0].message.content.strip()
         else:
             print(f'No response from {self.model}\'s API.')

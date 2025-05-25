@@ -8,18 +8,19 @@ input_files = [  # 注意plt颜色上限
     # 'outputs/5.5r/test_nomic_r0.18_f1000_isolated_u1.0_d0.6_i20-v1_paraphrase-deepseek-v3.jsonl',
 
     # main_500 & G (注意调整参数)
+    'outputs/test_nomic_r0.12_f1000_origin_paraphrase-deepseek-v3.jsonl',
+    'outputs/test_nomic_r0.12_f1000_origin_i20-v1_paraphrase-deepseek-v3.jsonl',
+    'outputs/test_nomic_r0.12_f1000_isolated_u1.0_d0.6_paraphrase-deepseek-v3.jsonl',
+    'outputs/test_nomic_r0.12_f1000_isolated_u1.0_d0.6_i20-v1_paraphrase-deepseek-v3.jsonl',
+    'outputs/5.5a/test_nomic_r0.12_f1000_mixed_u1.0_d0.6_a0.7_i20-v1_paraphrase-deepseek-v3.jsonl',
+
+    # main_100 (注意调整参数)
     # 'outputs/test_nomic_r0.12_f1000_origin_paraphrase-deepseek-v3.jsonl',
     # 'outputs/test_nomic_r0.12_f1000_origin_i20-v1_paraphrase-deepseek-v3.jsonl',
     # 'outputs/test_nomic_r0.12_f1000_isolated_u1.0_d0.6_paraphrase-deepseek-v3.jsonl',
     # 'outputs/test_nomic_r0.12_f1000_isolated_u1.0_d0.6_i20-v1_paraphrase-deepseek-v3.jsonl',
-
-    # main_100 (注意调整参数)
-    'outputs/test_nomic_r0.12_f1000_origin_paraphrase-deepseek-v3.jsonl',
-    'outputs/test_nomic_r0.12_f1000_origin_i20-v1_paragraph-deepseek-v3.jsonl',
-    'outputs/test_nomic_r0.12_f1000_isolated_u1.0_d0.6_paraphrase-deepseek-v3.jsonl',
-    'outputs/test_nomic_r0.12_f1000_isolated_u1.0_d0.6_i20-v1_paraphrase-deepseek-v3.jsonl',
-    'outputs/5.5a/test_nomic_r0.12_f1000_mixed_u1.0_d0.6_a0.7_paraphrase-deepseek-v3.jsonl',
-    'outputs/5.5a/test_nomic_r0.12_f1000_mixed_u1.0_d0.6_a0.7_i20-v1_paraphrase-deepseek-v3.jsonl',
+    # 'outputs/5.5a/test_nomic_r0.12_f1000_mixed_u1.0_d0.6_a0.7_paraphrase-deepseek-v3.jsonl',
+    # 'outputs/5.5a/test_nomic_r0.12_f1000_mixed_u1.0_d0.6_a0.7_i20-v1_paraphrase-deepseek-v3.jsonl',
     
     # 5.5a
     # 'outputs/5.5a/test_nomic_r0.12_f1000_mixed_u1.0_d0.6_a0.5_i20-v1_paraphrase-deepseek-v3.jsonl',
